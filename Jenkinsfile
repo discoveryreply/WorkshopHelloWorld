@@ -22,6 +22,12 @@ pipeline {
 				sh '/maven/maven3.8/bin/mvn package'
 			}
 		}
+		
+	stage('build docker image'){
+			steps{
+				sh 'docker build -t wrkhelloworld:v1 .'
+			}
+		}
 
 
 	}
