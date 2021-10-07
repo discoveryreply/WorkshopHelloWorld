@@ -5,21 +5,21 @@ pipeline {
 
 	stage('clean'){
 			steps{
-				sh 'mvn clean'
+				sh '/home/ec2-user/maven/maven3.8/bin/mvn clean'
 			}
 		}
 
 
 	stage('compile'){
 			steps{
-				sh 'mvn compile'
+				sh '/home/ec2-user/maven/maven3.8/bin/mvn compile'
 			}
 		}
 
 
 	stage('package'){
 			steps{
-				sh 'mvn package'
+				sh '/home/ec2-user/maven/maven3.8/bin/mvn package'
 			}
 		}
 
