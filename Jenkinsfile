@@ -3,9 +3,9 @@ pipeline {
 
 	stages {
 
-	stage('inizializzo'){
+	stage('clean'){
 			steps{
-				sh 'ls -al > test.txt'
+				sh 'mvn clean'
 			}
 		}
 
