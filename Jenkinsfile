@@ -22,6 +22,7 @@ pipeline {
 
 			steps{
 				sh '/maven/maven3.8/bin/mvn compile'
+				
 			}
 		}
 
