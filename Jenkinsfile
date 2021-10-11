@@ -4,7 +4,7 @@ pipeline {
 	environment
     {
     	DOCKER_BUILD_NAME = 'wrkhelloworld'
-		DOCKER_BUILD_VERSION = ''
+		DOCKER_BUILD_VERSION = 'v0'
 	}
 	
 	
