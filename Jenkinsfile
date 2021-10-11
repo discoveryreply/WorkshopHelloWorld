@@ -20,8 +20,8 @@ pipeline {
 			steps{
 				sh '/maven/maven3.8/bin/mvn compile'
 				sh 'DOCKER_BUILD_VERSION=`/maven/maven3.8/bin/mvn help:evaluate -Dexpression=project.version -q -DforceStdout`'
-				sh 'env > env.txt'
-				echo 'echo buildname: ${DOCKER_BUILD_NAME}:${DOCKER_BUILD_VERSION}'
+				sh 'env'
+				sh 'echo buildname: ${DOCKER_BUILD_NAME}:${DOCKER_BUILD_VERSION}'
 			}
 		}
 
