@@ -19,8 +19,8 @@ pipeline {
 	stage('compile'){
 			steps{
 				sh '/maven/maven3.8/bin/mvn compile'
-				sh 'DOCKER_BUILD_VERSION=`/maven/maven3.8/bin/mvn help:evaluate -Dexpression=project.version -q -DforceStdout`'
-				sh 'env'
+				sh 'DOCKER_TMP=`/maven/maven3.8/bin/mvn help:evaluate -Dexpression=project.version -q -DforceStdout`'
+				sh 'echo $DOCKER_TMP'
 				sh 'echo buildname: ${DOCKER_BUILD_NAME}:${DOCKER_BUILD_VERSION}'
 			}
 		}
@@ -34,15 +34,15 @@ pipeline {
 		
 	stage('build docker image'){
 			steps{
-				sh 'docker build -t $DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION .'
+				sh 'docker build -t $DOCKER_BUILD_NAME:$DOCKER_TMP .'
 			}
 		}
 		
 	stage('push image to ecr'){
 			steps{
 				sh 'aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 753680302459.dkr.ecr.eu-west-1.amazonaws.com'
-				sh 'docker tag $DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION 753680302459.dkr.ecr.eu-west-1.amazonaws.com/$DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION'
-				sh 'docker push 753680302459.dkr.ecr.eu-west-1.amazonaws.com/$DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION'
+				sh 'docker tag $DOCKER_BUILD_NAME:$DOCKER_TMP 753680302459.dkr.ecr.eu-west-1.amazonaws.com/$DOCKER_BUILD_NAME:$DOCKER_TMP'
+				sh 'docker push 753680302459.dkr.ecr.eu-west-1.amazonaws.com/$DOCKER_BUILD_NAME:$DOCKER_TMP'
 			}
 		}
 
