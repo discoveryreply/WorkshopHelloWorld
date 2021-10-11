@@ -4,7 +4,7 @@ pipeline {
 	environment
     {
     	DOCKER_BUILD_NAME = 'wrkhelloworld'
-		
+		DOCKER_BUILD_VERSION = sh(script: '/maven/maven3.8/bin/mvn help:evaluate -Dexpression=project.version -q -DforceStdout', , returnStdout: true).trim()
 	}
 	
 	
@@ -31,19 +31,11 @@ pipeline {
 		}
 		
 	stage('build docker image'){
-			environment
-        	{
-        		myVar = '0'
-        		imageVersion = '1'
-        	}
+
 			steps{
-				script{
-					myVar = 'my var'
-					imageVersion = sh '/maven/maven3.8/bin/mvn help:evaluate -Dexpression=project.version -q -DforceStdout'
-				}
-				sh 'echo myVar: $myVar'
-				sh 'echo imageVersion: $imageVersion'
-				sh 'docker build -t $DOCKER_BUILD_NAME:$imageVersion .'
+
+				sh 'echo imageVersion: $DOCKER_BUILD_VERSION'
+				sh 'docker build -t $DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION .'
 			}
 		}
 		
