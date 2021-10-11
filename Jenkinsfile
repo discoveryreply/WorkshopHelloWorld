@@ -3,7 +3,8 @@ pipeline {
 	
 	environment
     {
-    	DOCKER_BUILD_NAME = sh(script: '/maven/maven3.8/bin/mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', , returnStdout: true).trim()
+    	//DOCKER_BUILD_NAME = sh(script: '/maven/maven3.8/bin/mvn help:evaluate -Dexpression=project.artifactId -q -DforceStdout', , returnStdout: true).trim()
+		DOCKER_BUILD_NAME = 'wrkhelloworld'
 		DOCKER_BUILD_VERSION = sh(script: '/maven/maven3.8/bin/mvn help:evaluate -Dexpression=project.version -q -DforceStdout', , returnStdout: true).trim()
 	}
 	
