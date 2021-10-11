@@ -31,7 +31,11 @@ pipeline {
 		}
 		
 	stage('build docker image'){
-
+			environment
+        	{
+        		myVar = '0'
+        		imageVersion = '1'
+        	}
 			steps{
 				script{
 					myVar = 'my var'
