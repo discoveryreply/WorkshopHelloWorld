@@ -37,8 +37,8 @@ pipeline {
 					myVar = 'my var'
 					imageVersion = sh '/maven/maven3.8/bin/mvn help:evaluate -Dexpression=project.version -q -DforceStdout'
 				}
-				echo 'myVar: $myVar'
-				echo 'imageVersion: $imageVersion'
+				sh 'echo myVar: $myVar'
+				sh 'echo imageVersion: $imageVersion'
 				sh 'docker build -t $DOCKER_BUILD_NAME:$imageVersion .'
 			}
 		}
