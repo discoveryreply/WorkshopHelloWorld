@@ -22,44 +22,72 @@ pipeline {
 			}
 		}
 
-	stage('clean'){
-			steps 
-            {
-			script
-			{
-				docker.image("${DOCKER_BUILD_NAME_MAVEN}").inside(DOCKER_RUN_PARAMS) 
+		stage('clean'){
+			steps {
+				script
 				{
-    				sh 'mvn clean'
-    			}
-    		}  
-    		}   
+					docker.image("${DOCKER_BUILD_NAME_MAVEN}").inside(DOCKER_RUN_PARAMS) 
+					{
+	    				sh 'mvn clean'
+	    			}
+	    		}  
+	    	}   
 		}
-
-	stage('compile'){
-		steps 
-            {
-			script
-			{
-				docker.image("${DOCKER_BUILD_NAME_MAVEN}").inside(DOCKER_RUN_PARAMS) 
+	
+		stage('compile'){
+			steps {
+				script
 				{
-    				sh 'mvn compile'
-    			}
-    		}
-    		}   
+					docker.image("${DOCKER_BUILD_NAME_MAVEN}").inside(DOCKER_RUN_PARAMS) 
+					{
+	    				sh 'mvn compile'
+	    			}
+	    		}
+	    	}   
 		}
-
-
-	stage('package'){
-		steps 
-            {
-			script
-			{
-				docker.image("${DOCKER_BUILD_NAME_MAVEN}").inside(DOCKER_RUN_PARAMS) 
+	
+	
+		stage('package'){
+			steps {
+				script
 				{
-    				sh 'mvn package'
-    			}
-    		}
-    		}  
+					docker.image("${DOCKER_BUILD_NAME_MAVEN}").inside(DOCKER_RUN_PARAMS) 
+					{
+	    				sh 'mvn package'
+	    			}
+	    		}
+	    	}  
 		}
-	}
+		
+		/* versione senza utilizzo del plugin docker
+		stage('build docker image (microservizio)'){
+			steps{
+				sh 'docker build -t $DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION .'
+			}
+		}*/
+		
+		stage('push image to ecr (microservizio)'){
+        	environment
+        	{
+        		AWS_REGION = 'eu-west-1'
+        		REGISTRY_URL = 'http://753680302459.dkr.ecr.eu-west-1.amazonaws.com'
+    			REGISTRY_NAME = sh(script: 'echo $DOCKER_BUILD_NAME', , returnStdout: true).trim()
+    			imageName = DOCKER_BUILD_NAME + ':' + DOCKER_BUILD_VERSION
+        	}
+		
+			steps{
+				sh 'aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 753680302459.dkr.ecr.eu-west-1.amazonaws.com'
+				//sh 'docker tag $DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION 753680302459.dkr.ecr.eu-west-1.amazonaws.com/$DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION'
+				//sh 'docker push 753680302459.dkr.ecr.eu-west-1.amazonaws.com/$DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION'
+				docker.withRegistry(REGISTRY_URL)
+				{	
+					//build e push dell'immagine su ECR:
+					docker.build(imageName, ".").push()					
+				}
+				
+				
+			}
+		}
+	
+	} //stages
 }
