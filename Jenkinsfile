@@ -23,34 +23,42 @@ pipeline {
 		}
 
 	stage('clean'){
+			steps 
+            {
 			script
 			{
 				docker.image("${DOCKER_BUILD_NAME_MAVEN}").inside(DOCKER_RUN_PARAMS) 
 				{
     				sh 'mvn clean'
     			}
-    		}     
+    		}  
+    		}   
 		}
 
 	stage('compile'){
-
+		steps 
+            {
 			script
 			{
 				docker.image("${DOCKER_BUILD_NAME_MAVEN}").inside(DOCKER_RUN_PARAMS) 
 				{
     				sh 'mvn compile'
     			}
+    		}
     		}   
 		}
 
 
 	stage('package'){
+		steps 
+            {
 			script
 			{
 				docker.image("${DOCKER_BUILD_NAME_MAVEN}").inside(DOCKER_RUN_PARAMS) 
 				{
     				sh 'mvn package'
     			}
+    		}
     		}  
 		}
 		
