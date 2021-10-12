@@ -76,15 +76,17 @@ pipeline {
         	}
 		
 			steps{
-				sh 'aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 753680302459.dkr.ecr.eu-west-1.amazonaws.com'
-				//sh 'docker tag $DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION 753680302459.dkr.ecr.eu-west-1.amazonaws.com/$DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION'
-				//sh 'docker push 753680302459.dkr.ecr.eu-west-1.amazonaws.com/$DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION'
-				docker.withRegistry(REGISTRY_URL)
-				{	
-					//build e push dell'immagine su ECR:
-					docker.build(imageName, ".").push()					
+				script
+    			{
+					sh 'aws ecr get-login-password --region eu-west-1 | docker login --username AWS --password-stdin 753680302459.dkr.ecr.eu-west-1.amazonaws.com'
+					//sh 'docker tag $DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION 753680302459.dkr.ecr.eu-west-1.amazonaws.com/$DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION'
+					//sh 'docker push 753680302459.dkr.ecr.eu-west-1.amazonaws.com/$DOCKER_BUILD_NAME:$DOCKER_BUILD_VERSION'
+					docker.withRegistry(REGISTRY_URL)
+					{	
+						//build e push dell'immagine su ECR:
+						docker.build(imageName, ".").push()					
+					}
 				}
-				
 				
 			}
 		}
