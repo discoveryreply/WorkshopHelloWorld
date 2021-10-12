@@ -72,7 +72,7 @@ pipeline {
         		AWS_REGION = 'eu-west-1'
         		REGISTRY_URL = 'http://753680302459.dkr.ecr.eu-west-1.amazonaws.com'
     			REGISTRY_NAME = sh(script: 'echo $DOCKER_BUILD_NAME', , returnStdout: true).trim()
-    			imageName = DOCKER_BUILD_NAME + ':' + DOCKER_BUILD_VERSION
+    			imageName = $DOCKER_BUILD_NAME + ':' + $DOCKER_BUILD_VERSION
         	}
 		
 			steps{
